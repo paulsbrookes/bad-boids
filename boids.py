@@ -16,10 +16,15 @@ u_pos_lim = np.array([50, 1000])
 l_vel_lim = np.array([0, -20])
 u_vel_lim = np.array([10, 20])
 
-boids_x=[random.uniform(l_pos_lim[0],u_pos_lim[0]) for x in range(boid_count)]
-boids_y=[random.uniform(l_pos_lim[1],u_pos_lim[1]) for x in range(boid_count)]
-boid_x_velocities=[random.uniform(l_vel_lim[0],u_vel_lim[0]) for x in range(boid_count)]
-boid_y_velocities=[random.uniform(l_vel_lim[1],u_vel_lim[1]) for x in range(boid_count)]
+def new_flock(count, lower_limit, upper_limit):
+	width = upper_limit - lower_limit
+	return lower_limit + np.random.rand(count)*width
+
+boids_x = new_flock(boid_count, l_pos_lim[0], u_pos_lim[0])
+boids_y = new_flock(boid_count, l_pos_lim[1], u_pos_lim[1])
+boid_x_velocities = new_flock(boid_count, l_vel_lim[0], u_vel_lim[0])
+boid_y_velocities = new_flock(boid_count, l_vel_lim[1], u_vel_lim[1])
+
 boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
 
 def update_boids(boids):
