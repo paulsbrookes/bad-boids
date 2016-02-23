@@ -6,7 +6,8 @@ import numpy as np
 
 
 def test_bad_boids_regression():
-    regression_data = yaml.load(open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
+    regression_data = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
     boid_data = regression_data["before"]
     update_boids(boid_data)
     for after, before in zip(regression_data["after"], boid_data):
@@ -15,11 +16,12 @@ def test_bad_boids_regression():
 
 
 def test_bad_boids_new_flock():
-    window_data = yaml.load(open(os.path.join(os.path.dirname(__file__), 'myfile.yml')))
+    window_data = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'myfile.yml')))
     windows = window_data['windows']
     counts = window_data['counts']
     for window in windows:
         for count in counts:
-            points = new_flock(count, window[0], window[1])
+            points = new_flock(count, np.array([window[0]]), np.array([window[1]]))
             in_range = (points >= window[0]) * (points <= window[1])
             assert_true(np.all(in_range))

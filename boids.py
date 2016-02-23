@@ -11,21 +11,16 @@ import numpy as np
 # Deliberately terrible code for teaching purposes
 
 boid_count = 50
-l_pos_lim = np.array([-450, 100])
-u_pos_lim = np.array([50, 1000])
-l_vel_lim = np.array([0, -20])
-u_vel_lim = np.array([10, 20])
+lower_limits = np.array([-450, 50, 0, -20])
+upper_limits = np.array([100, 1000, 10, 20])
 
-def new_flock(count, lower_limit, upper_limit):
-	width = upper_limit - lower_limit
-	return lower_limit + np.random.rand(count)*width
 
-boids_x = new_flock(boid_count, l_pos_lim[0], u_pos_lim[0])
-boids_y = new_flock(boid_count, l_pos_lim[1], u_pos_lim[1])
-boid_x_velocities = new_flock(boid_count, l_vel_lim[0], u_vel_lim[0])
-boid_y_velocities = new_flock(boid_count, l_vel_lim[1], u_vel_lim[1])
+def new_flock(count, lower_limits, upper_limits):
+	width = upper_limits - lower_limits
+	difference =  np.random.rand(lower_limits.size, count)*width[:,np.newaxis]
+	return lower_limits[:,np.newaxis] + difference
 
-boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
+boids = new_flock(boid_count, lower_limits, upper_limits)
 
 def update_boids(boids):
 	xs,ys,xvs,yvs=boids
