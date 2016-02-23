@@ -10,7 +10,7 @@ import numpy as np
 
 # Deliberately terrible code for teaching purposes
 
-boid_count = 50
+boid_count = 2
 lower_limits = np.array([-450, 50, 0, -20])
 upper_limits = np.array([100, 1000, 10, 20])
 
@@ -24,19 +24,21 @@ boids = new_flock(boid_count, lower_limits, upper_limits)
 
 def update_boids(boids):
 	xs, ys, xvs, yvs = boids
-	print xs.shape, ys.shape, xvs.shape, yvs.shape
-	attraction_factor = 0.01/len(xs)
+	attraction_factor = 0.01
 	repulsion_distance = 10
 	speed_match_distance = 100
 	speed_match_factor = 0.125/len(xs)
-
+	positions = np.array([xs, ys])
+	velocities = np.array([xvs, yvs])
+	middle = np.mean(positions, 1)
+	
 	# Fly towards the middle
 	for i in range(len(xs)):  # repeated code
 		for j in range(len(xs)):
-			xvs[i] = xvs[i] + (xs[j] - xs[i]) * attraction_factor
+			xvs[i] = xvs[i] + (xs[j] - xs[i]) * attraction_factor/len(xs)
 	for i in range(len(xs)):
 		for j in range(len(xs)):
-			yvs[i]=yvs[i]+(ys[j]-ys[i])*attraction_factor
+			yvs[i]=yvs[i]+(ys[j]-ys[i])*attraction_factor/len(xs)
 	# Fly away from nearby boids
 	for i in range(len(xs)):
 		for j in range(len(xs)):
