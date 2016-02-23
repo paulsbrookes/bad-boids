@@ -24,6 +24,7 @@ boids = new_flock(boid_count, lower_limits, upper_limits)
 
 def update_boids(boids):
 	xs, ys, xvs, yvs = boids
+	print xs.shape, ys.shape, xvs.shape, yvs.shape
 	attraction_factor = 0.01/len(xs)
 	repulsion_distance = 10
 	speed_match_distance = 100
@@ -49,13 +50,12 @@ def update_boids(boids):
 				xvs[i] = xvs[i] + (xvs[j] - xvs[i])*speed_match_factor
 				yvs[i] = yvs[i] + (yvs[j] - yvs[i])*speed_match_factor
 	# Move according to velocities
-	for i in range(len(xs)):
-		xs[i] = xs[i] + xvs[i]
-		ys[i] = ys[i] + yvs[i]
+	xs += xvs
+	ys += yvs
 
 
 figure = plt.figure()
-axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
+axes = plt.axes(xlim = (-500, 1500), ylim = (-500, 1500))
 scatter = axes.scatter(boids[0], boids[1])
 
 def animate(frame):
@@ -64,7 +64,7 @@ def animate(frame):
 
 
 anim = animation.FuncAnimation(figure, animate,
-                               frames=50, interval=50)
+                               frames = 50, interval = 50)
 
 if __name__ == "__main__":
     plt.show()
