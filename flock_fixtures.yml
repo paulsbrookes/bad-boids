@@ -1,0 +1,9 @@
+window_limits:
+- -10
+- 10
+count_limits:
+- 1
+- 10
+vector_limits:
+- 2
+- 10
