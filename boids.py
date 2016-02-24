@@ -2,10 +2,15 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
 import numpy as np
+import yaml
+import os
 
+limits_data = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'default_fixture.yml')))
 boid_count = 50
-lower_limits = np.array([-450, 50, 0, -20])
-upper_limits = np.array([100, 1000, 10, 20])
+position_limits = np.array(limits_data['position_limits'])
+velocity_limits = np.array(limits_data['velocity_limits'])
+
 
 def new_flock(count, lower_limits, upper_limits):
 	width = upper_limits - lower_limits
@@ -51,15 +56,14 @@ def animate(frame):
 	scatter.set_offsets(zip(positions[0], positions[1]))
 
 
-positions = new_flock(boid_count, lower_limits[0:2], upper_limits[0:2])
-velocities = new_flock(boid_count, lower_limits[2:4], upper_limits[2:4])
+positions = new_flock(boid_count, position_limits[0], position_limits[1])
+velocities = new_flock(boid_count, velocity_limits[0], velocity_limits[1])
 
 figure = plt.figure()
 axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
 scatter = axes.scatter(positions[0], positions[1])
 
-anim = animation.FuncAnimation(figure, animate,
-                               frames=50, interval=50)
+anim = animation.FuncAnimation(figure, animate, frames=50, interval=50)
 
 if __name__ == "__main__":
     plt.show()
