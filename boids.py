@@ -33,6 +33,7 @@ class Flock(object):
 
     def update_boids(self):
         self.accelerate_to_middle()
+        self.displacements_and_distances()
         self.accelerate_from_boids()
         self.speed_match()
         self.move()
@@ -42,12 +43,14 @@ class Flock(object):
         direction_to_middle = middle[:, np.newaxis] - self.positions
         self.velocities += direction_to_middle*self.attraction_strength
 
-    def accelerate_from_boids(self):
-        displacements = self.positions[:, np.newaxis, :] - self.positions[:, :, np.newaxis]
-        squared_displacements = displacements ** 2
+    def displacements_and_distances(self):
+        self.displacements = self.positions[:, np.newaxis, :] - self.positions[:, :, np.newaxis]
+        squared_displacements = self.displacements ** 2
         self.square_distances = np.sum(squared_displacements, 0)
+
+    def accelerate_from_boids(self):
         far_away = self.square_distances > self.repulsion_distance**2
-        displacements_if_close = np.copy(displacements)
+        displacements_if_close = np.copy(self.displacements)
         displacements_if_close[0, :, :][far_away] = 0
         displacements_if_close[1, :, :][far_away] = 0
         self.velocities += np.sum(displacements_if_close, 1)

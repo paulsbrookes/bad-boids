@@ -69,14 +69,28 @@ def test_flock_accelerate_to_middle():
         for after_value, before_value in zip(after, before):
             assert_true(np.allclose(after_value, before_value, atol=0.01))
 
-def test_accelerate_from_boids():
+def test_flock_accelerate_from_boids():
     regression_data = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'accelerate_from_boids_fixture.yml')))
     boid_data = np.array(regression_data["before"])
     flock = Flock()
     flock.positions = boid_data[0]
     flock.velocities = boid_data[1]
+    flock.displacements_and_distances()
     flock.accelerate_from_boids()
+    for after, before in zip(regression_data["after"], boid_data):
+        for after_value, before_value in zip(after, before):
+            assert_true(np.allclose(after_value, before_value, atol=0.01))
+
+def test_flock_speed_match():
+    regression_data = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'speed_match_fixture.yml')))
+    boid_data = np.array(regression_data["before"])
+    flock = Flock()
+    flock.positions = boid_data[0]
+    flock.velocities = boid_data[1]
+    flock.displacements_and_distances()
+    flock.speed_match()
     for after, before in zip(regression_data["after"], boid_data):
         for after_value, before_value in zip(after, before):
             assert_true(np.allclose(after_value, before_value, atol=0.01))
