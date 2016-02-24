@@ -30,7 +30,7 @@ def update_boids(positions, velocities):
 	speed_match_distance = 100
 	speed_match_factor = 0.125/len(xs)
 	middle = np.mean(positions, 1)
-	direction_to_middle = middle[:,np.newaxis] - positions
+	direction_to_middle = middle[:, np.newaxis] - positions
 	velocities += direction_to_middle*attraction_strength
 
 	# Fly away from nearby boids
@@ -46,12 +46,11 @@ def update_boids(positions, velocities):
 				xvs[i] = xvs[i] + (xvs[j] - xvs[i])*speed_match_factor
 				yvs[i] = yvs[i] + (yvs[j] - yvs[i])*speed_match_factor
 	#Move according to velocities
-	xs += xvs
-	ys += yvs
+	positions += velocities
 
 
 figure = plt.figure()
-axes = plt.axes(xlim = (-500, 1500), ylim = (-500, 1500))
+axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
 scatter = axes.scatter(positions[0], positions[1])
 
 def animate(frame):
@@ -60,7 +59,7 @@ def animate(frame):
 
 
 anim = animation.FuncAnimation(figure, animate,
-                               frames = 50, interval = 50)
+                               frames=50, interval=50)
 
 if __name__ == "__main__":
     plt.show()
