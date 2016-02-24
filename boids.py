@@ -14,6 +14,9 @@ repulsion_distance = default_params['repulsion_distance']
 speed_match_distance = default_params['speed_match_distance']
 speed_match_strength = default_params['speed_match_strength']
 boid_count = default_params['boid_count']
+axes_limits = default_params['axes_limits']
+frames = default_params['frames']
+interval = default_params['interval']
 
 
 def new_flock(count, lower_limits, upper_limits):
@@ -59,10 +62,10 @@ positions = new_flock(boid_count, position_limits[0], position_limits[1])
 velocities = new_flock(boid_count, velocity_limits[0], velocity_limits[1])
 
 figure = plt.figure()
-axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
+axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
 scatter = axes.scatter(positions[0], positions[1])
 
-anim = animation.FuncAnimation(figure, animate, frames=50, interval=50)
+anim = animation.FuncAnimation(figure, animate, frames=frames, interval=interval)
 
 if __name__ == "__main__":
-    plt.show()
+	plt.show()
