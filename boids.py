@@ -20,18 +20,19 @@ def new_flock(count, lower_limits, upper_limits):
 	difference = np.random.rand(lower_limits.size, count)*width[:,np.newaxis]
 	return lower_limits[:, np.newaxis] + difference
 
-boids = new_flock(boid_count, lower_limits, upper_limits)
+positions = new_flock(boid_count, lower_limits[0:2], upper_limits[0:2])
+velocities = new_flock(boid_count, lower_limits[2:4], upper_limits[2:4])
+#boids = new_flock(boid_count, lower_limits, upper_limits)
 
-def update_boids(boids):
-	xs, ys, xvs, yvs = boids
+def update_boids(positions, velocities):
+	xs, ys = positions
+	xvs, yvs = velocities
 	attraction_factor = 0.01
 	repulsion_distance = 10
 	speed_match_distance = 100
 	speed_match_factor = 0.125/len(xs)
-	positions = np.array([xs, ys])
-	velocities = np.array([xvs, yvs])
 	middle = np.mean(positions, 1)
-	
+
 	# Fly towards the middle
 	for i in range(len(xs)):  # repeated code
 		for j in range(len(xs)):
@@ -39,6 +40,7 @@ def update_boids(boids):
 	for i in range(len(xs)):
 		for j in range(len(xs)):
 			yvs[i]=yvs[i]+(ys[j]-ys[i])*attraction_factor/len(xs)
+
 	# Fly away from nearby boids
 	for i in range(len(xs)):
 		for j in range(len(xs)):
@@ -51,18 +53,19 @@ def update_boids(boids):
 			if (xs[j] - xs[i])**2 + (ys[j]-ys[i])**2 < speed_match_distance**2:
 				xvs[i] = xvs[i] + (xvs[j] - xvs[i])*speed_match_factor
 				yvs[i] = yvs[i] + (yvs[j] - yvs[i])*speed_match_factor
-	# Move according to velocities
+	#Move according to velocities
 	xs += xvs
 	ys += yvs
+	#print xs[0], ys[0], xvs[0], yvs[0]
 
 
 figure = plt.figure()
 axes = plt.axes(xlim = (-500, 1500), ylim = (-500, 1500))
-scatter = axes.scatter(boids[0], boids[1])
+scatter = axes.scatter(positions[0], positions[1])
 
 def animate(frame):
-   update_boids(boids)
-   scatter.set_offsets(zip(boids[0], boids[1]))
+   update_boids(positions, velocities)
+   scatter.set_offsets(zip(positions[0], positions[1]))
 
 
 anim = animation.FuncAnimation(figure, animate,
