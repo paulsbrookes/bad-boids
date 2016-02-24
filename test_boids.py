@@ -94,3 +94,12 @@ def test_flock_speed_match():
     for after, before in zip(regression_data["after"], boid_data):
         for after_value, before_value in zip(after, before):
             assert_true(np.allclose(after_value, before_value, atol=0.01))
+
+def test_flock_displacements_and_distances():
+    flock = Flock()
+    flock.displacements_and_distances()
+    transpose_positions = flock.positions.T
+    for i, pos_i in enumerate(transpose_positions.tolist()):
+        for j, pos_j in enumerate(transpose_positions.tolist()):
+            displacement_check = np.array(pos_j) - np.array(pos_i)
+            assert_true(np.all(flock.displacements[:,i,j] == displacement_check))
