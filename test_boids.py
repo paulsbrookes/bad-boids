@@ -17,7 +17,7 @@ def test_bad_boids_regression():
 
 def test_bad_boids_new_flock():
     window_data = yaml.load(
-        open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
+        open(os.path.join(os.path.dirname(__file__), 'new_flock_fixture.yml')))
     windows = window_data['windows']
     counts = window_data['counts']
     for window in windows:
@@ -28,7 +28,7 @@ def test_bad_boids_new_flock():
 
 def test_bad_boids_new_flock_vectorized():
     window_data = yaml.load(
-        open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
+        open(os.path.join(os.path.dirname(__file__), 'new_flock_fixture.yml')))
     window_limits = np.array(window_data['window_limits'])
     count_limits = window_data['count_limits']
     boids_count = np.random.randint(count_limits[0], count_limits[1])
