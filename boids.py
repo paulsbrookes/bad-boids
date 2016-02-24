@@ -21,10 +21,8 @@ def new_flock(count, lower_limits, upper_limits):
 	difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
 	return lower_limits[:, np.newaxis] + difference
 
-def update_boids(positions, velocities):
-	xs, ys = positions
-	xvs, yvs = velocities
 
+def update_boids(positions, velocities):
 	# Move to middle
 	middle = np.mean(positions, 1)
 	direction_to_middle = middle[:, np.newaxis] - positions
@@ -48,8 +46,9 @@ def update_boids(positions, velocities):
 	velocity_differences_if_close[1, :, :][very_far] = 0
 	velocities -= np.mean(velocity_differences_if_close, 1) * speed_match_strength
 
-	#Move according to velocities
+	# Move according to velocities
 	positions += velocities
+
 
 def animate(frame):
 	update_boids(positions, velocities)
