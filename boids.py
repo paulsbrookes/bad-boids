@@ -23,7 +23,6 @@ positions = new_flock(boid_count, lower_limits[0:2], upper_limits[0:2])
 velocities = new_flock(boid_count, lower_limits[2:4], upper_limits[2:4])
 
 def update_boids(positions, velocities):
-	print positions[0], velocities[0]
 	xs, ys = positions
 	xvs, yvs = velocities
 	attraction_strength = 0.01
@@ -49,7 +48,6 @@ def update_boids(positions, velocities):
 	#Move according to velocities
 	xs += xvs
 	ys += yvs
-	print positions[0], velocities[0]
 
 
 figure = plt.figure()
