@@ -102,4 +102,6 @@ def test_flock_displacements_and_distances():
     for i, pos_i in enumerate(transpose_positions.tolist()):
         for j, pos_j in enumerate(transpose_positions.tolist()):
             displacement_check = np.array(pos_j) - np.array(pos_i)
-            assert_true(np.all(flock.displacements[:,i,j] == displacement_check))
+            distance_check = np.sum(displacement_check**2)
+            assert_true(np.all(flock.displacements[:, i, j] == displacement_check))
+            assert_true(flock.square_distances[i, j] == distance_check)
