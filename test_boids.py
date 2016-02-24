@@ -22,7 +22,8 @@ def test_bad_boids_new_flock():
     counts = window_data['counts']
     for window in windows:
         for count in counts:
-            points = new_flock(count, np.array([window[0]]), np.array([window[1]]))
+            points = new_flock(
+                count, np.array([window[0]]), np.array([window[1]]))
             in_range = (points >= window[0]) * (points <= window[1])
             assert_true(np.all(in_range))
 
