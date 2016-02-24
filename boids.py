@@ -20,52 +20,55 @@ interval = default_params['interval']
 
 
 def new_flock(count, lower_limits, upper_limits):
-	width = upper_limits - lower_limits
-	difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
-	return lower_limits[:, np.newaxis] + difference
+    width = upper_limits - lower_limits
+    difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
+    return lower_limits[:, np.newaxis] + difference
+
+class Flock(object):
+    def __init__(self, default_params=default_params):
+        self.positions = new_flock(
+                            boid_count, position_limits[0], position_limits[1])
+        self.velocities = new_flock(
+                            boid_count, velocity_limits[0], velocity_limits[1])
+
+    def animate(self, frame):
+        self.update_boids()
+        scatter.set_offsets(zip(self.positions[0], self.positions[1]))
+
+    def update_boids(self):
+        # Move to middle
+        middle = np.mean(self.positions, 1)
+        direction_to_middle = middle[:, np.newaxis] - self.positions
+        self.velocities += direction_to_middle*attraction_strength
+        # Fly away from nearby boids
+        displacements = self.positions[:, np.newaxis, :] - self.positions[:, :, np.newaxis]
+        squared_displacements = displacements ** 2
+        square_distances = np.sum(squared_displacements, 0)
+        far_away = square_distances > repulsion_distance ** 2
+        displacements_if_close = np.copy(displacements)
+        displacements_if_close[0, :, :][far_away] = 0
+        displacements_if_close[1, :, :][far_away] = 0
+        self.velocities += np.sum(displacements_if_close, 1)
+
+        # Try to match speed with nearby boids
+        velocity_differences = self.velocities[:, np.newaxis, :] - self.velocities[:, :, np.newaxis]
+        very_far = square_distances > speed_match_distance ** 2
+        velocity_differences_if_close = np.copy(velocity_differences)
+        velocity_differences_if_close[0, :, :][very_far] = 0
+        velocity_differences_if_close[1, :, :][very_far] = 0
+        self.velocities -= np.mean(velocity_differences_if_close, 1) * speed_match_strength
+
+        # Move according to velocities
+        self.positions += self.velocities
 
 
-def update_boids(positions, velocities):
-	# Move to middle
-	middle = np.mean(positions, 1)
-	direction_to_middle = middle[:, np.newaxis] - positions
-	velocities += direction_to_middle*attraction_strength
 
-	# Fly away from nearby boids
-	displacements = positions[:, np.newaxis, :] - positions[:, :, np.newaxis]
-	squared_displacements = displacements ** 2
-	square_distances = np.sum(squared_displacements, 0)
-	far_away = square_distances > repulsion_distance ** 2
-	displacements_if_close = np.copy(displacements)
-	displacements_if_close[0, :, :][far_away] = 0
-	displacements_if_close[1, :, :][far_away] = 0
-	velocities += np.sum(displacements_if_close, 1)
-
-	# Try to match speed with nearby boids
-	velocity_differences = velocities[:, np.newaxis, :] - velocities[:, :, np.newaxis]
-	very_far = square_distances > speed_match_distance ** 2
-	velocity_differences_if_close = np.copy(velocity_differences)
-	velocity_differences_if_close[0, :, :][very_far] = 0
-	velocity_differences_if_close[1, :, :][very_far] = 0
-	velocities -= np.mean(velocity_differences_if_close, 1) * speed_match_strength
-
-	# Move according to velocities
-	positions += velocities
-
-
-def animate(frame):
-	update_boids(positions, velocities)
-	scatter.set_offsets(zip(positions[0], positions[1]))
-
-
-positions = new_flock(boid_count, position_limits[0], position_limits[1])
-velocities = new_flock(boid_count, velocity_limits[0], velocity_limits[1])
-
+flock = Flock()
 figure = plt.figure()
 axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
-scatter = axes.scatter(positions[0], positions[1])
+scatter = axes.scatter(flock.positions[:, 0], flock.positions[:, 1])
 
-anim = animation.FuncAnimation(figure, animate, frames=frames, interval=interval)
+anim = animation.FuncAnimation(figure, flock.animate, frames=frames, interval=interval)
 
 if __name__ == "__main__":
-	plt.show()
+    plt.show()
