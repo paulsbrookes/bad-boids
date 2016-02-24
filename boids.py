@@ -5,11 +5,15 @@ import numpy as np
 import yaml
 import os
 
-limits_data = yaml.load(
+default_params = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'default_fixture.yml')))
-boid_count = 50
-position_limits = np.array(limits_data['position_limits'])
-velocity_limits = np.array(limits_data['velocity_limits'])
+position_limits = np.array(default_params['position_limits'])
+velocity_limits = np.array(default_params['velocity_limits'])
+attraction_strength = default_params['attraction_strength']
+repulsion_distance = default_params['repulsion_distance']
+speed_match_distance = default_params['speed_match_distance']
+speed_match_strength = default_params['speed_match_strength']
+boid_count = default_params['boid_count']
 
 
 def new_flock(count, lower_limits, upper_limits):
@@ -20,10 +24,6 @@ def new_flock(count, lower_limits, upper_limits):
 def update_boids(positions, velocities):
 	xs, ys = positions
 	xvs, yvs = velocities
-	attraction_strength = 0.01
-	repulsion_distance = 10
-	speed_match_distance = 100
-	speed_match_strength = 0.125
 
 	# Move to middle
 	middle = np.mean(positions, 1)
