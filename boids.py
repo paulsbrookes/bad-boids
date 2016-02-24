@@ -10,21 +10,20 @@ import numpy as np
 
 # Deliberately terrible code for teaching purposes
 
-boid_count = 50
+boid_count = 2
 lower_limits = np.array([-450, 50, 0, -20])
 upper_limits = np.array([100, 1000, 10, 20])
 
-
 def new_flock(count, lower_limits, upper_limits):
 	width = upper_limits - lower_limits
-	difference = np.random.rand(lower_limits.size, count)*width[:,np.newaxis]
+	difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
 	return lower_limits[:, np.newaxis] + difference
 
 positions = new_flock(boid_count, lower_limits[0:2], upper_limits[0:2])
 velocities = new_flock(boid_count, lower_limits[2:4], upper_limits[2:4])
-#boids = new_flock(boid_count, lower_limits, upper_limits)
 
 def update_boids(positions, velocities):
+	print positions[0], velocities[0]
 	xs, ys = positions
 	xvs, yvs = velocities
 	attraction_strength = 0.01
@@ -50,7 +49,7 @@ def update_boids(positions, velocities):
 	#Move according to velocities
 	xs += xvs
 	ys += yvs
-	#print xs[0], ys[0], xvs[0], yvs[0]
+	print positions[0], velocities[0]
 
 
 figure = plt.figure()
