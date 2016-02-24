@@ -1,4 +1,4 @@
-from boids import update_boids, new_flock
+from boids import new_flock, Flock
 from nose.tools import assert_almost_equal, assert_true
 import os
 import yaml
@@ -9,7 +9,10 @@ def test_bad_boids_regression():
     regression_data = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
     boid_data = np.array(regression_data["before"])
-    update_boids(boid_data[0], boid_data[1])
+    flock = Flock()
+    flock.positions = boid_data[0]
+    flock.velocities = boid_data[1]
+    flock.update_boids()
     for after, before in zip(regression_data["after"], boid_data):
         for after_value, before_value in zip(after, before):
             assert_true(np.allclose(after_value, before_value, atol=0.01))
