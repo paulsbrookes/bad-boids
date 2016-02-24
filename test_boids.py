@@ -7,7 +7,7 @@ import numpy as np
 
 def test_bad_boids_regression():
     regression_data = yaml.load(
-        open(os.path.join(os.path.dirname(__file__), 'fixture.yml')))
+        open(os.path.join(os.path.dirname(__file__), 'update_fixture.yml')))
     boid_data = np.array(regression_data["before"])
     flock = Flock()
     flock.positions = boid_data[0]
@@ -44,3 +44,15 @@ def test_bad_boids_new_flock_vectorized():
     points = new_flock(boids_count, lower_limits, upper_limits)
     in_range = np.logical_and(points >= lower_limits[:, np.newaxis], points <= upper_limits[:, np.newaxis])
     assert_true(np.all(in_range))
+
+def test_flock_move():
+    regression_data = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'move_fixture.yml')))
+    boid_data = np.array(regression_data["before"])
+    flock = Flock()
+    flock.positions = boid_data[0]
+    flock.velocities = boid_data[1]
+    flock.move()
+    for after, before in zip(regression_data["after"], boid_data):
+        for after_value, before_value in zip(after, before):
+            assert_true(np.allclose(after_value, before_value, atol=0.01))

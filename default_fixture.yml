@@ -1,0 +1,13 @@
+axes_limits:
+- [-500, 1500]
+- [-500, 1500]
+boid_count: 10
+frames: 50
+interval: 50
+movement_params: [0.01, 10, 0.125, 100]
+position_limits:
+- [-450, 50]
+- [100, 1000]
+velocity_limits:
+- [0, -20]
+- [10, 20]
