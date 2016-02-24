@@ -8,7 +8,7 @@ from matplotlib import animation
 import random
 import numpy as np
 
-boid_count = 2
+boid_count = 50
 lower_limits = np.array([-450, 50, 0, -20])
 upper_limits = np.array([100, 1000, 10, 20])
 
@@ -57,9 +57,10 @@ figure = plt.figure()
 axes = plt.axes(xlim=(-500, 1500), ylim=(-500, 1500))
 scatter = axes.scatter(positions[0], positions[1])
 
+
 def animate(frame):
-   update_boids(positions, velocities)
-   scatter.set_offsets(zip(positions[0], positions[1]))
+	update_boids(positions, velocities)
+	scatter.set_offsets(zip(positions[0], positions[1]))
 
 
 anim = animation.FuncAnimation(figure, animate,
