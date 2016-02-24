@@ -9,15 +9,11 @@ default_params = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'default_fixture.yml')))
 def_position_limits = np.array(default_params['position_limits'])
 def_velocity_limits = np.array(default_params['velocity_limits'])
-attraction_strength = default_params['attraction_strength']
-repulsion_distance = default_params['repulsion_distance']
-speed_match_distance = default_params['speed_match_distance']
-speed_match_strength = default_params['speed_match_strength']
 boid_count = default_params['boid_count']
 axes_limits = default_params['axes_limits']
 frames = default_params['frames']
 interval = default_params['interval']
-def_movement_params = [attraction_strength, repulsion_distance, speed_match_strength, speed_match_distance]
+def_movement_params = default_params['movement_params']
 
 
 def new_flock(count, lower_limits, upper_limits):
@@ -31,9 +27,9 @@ class Flock(object):
         self.positions = new_flock(boid_count, position_limits[0], position_limits[1])
         self.velocities = new_flock(boid_count, velocity_limits[0], velocity_limits[1])
         self.attraction_strength = movement_params[0]
-	self.repulsion_distance = movement_params[1]
-	self.speed_match_strength = movement_params[2]
-	self.speed_match_distance = movement_params[3]
+        self.repulsion_distance = movement_params[1]
+        self.speed_match_strength = movement_params[2]
+        self.speed_match_distance = movement_params[3]
 
     def update_boids(self):
         self.accelerate_to_middle()
@@ -71,12 +67,10 @@ class Flock(object):
         self.update_boids()
         scatter.set_offsets(zip(self.positions[0], self.positions[1]))
 
-
 flock = Flock()
 figure = plt.figure()
 axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
 scatter = axes.scatter(flock.positions[:, 0], flock.positions[:, 1])
-
 anim = animation.FuncAnimation(
  figure, flock.animate, frames=frames, interval=interval)
 

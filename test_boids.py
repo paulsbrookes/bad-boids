@@ -30,6 +30,7 @@ def test_bad_boids_new_flock():
             in_range = (points >= window[0]) * (points <= window[1])
             assert_true(np.all(in_range))
 
+
 def test_bad_boids_new_flock_vectorized():
     window_data = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'new_flock_fixture.yml')))
@@ -41,8 +42,5 @@ def test_bad_boids_new_flock_vectorized():
     lower_limits = np.random.uniform(window_limits[0], window_limits[1], vector_length)
     upper_limits = np.random.uniform(lower_limits, window_limits[1])
     points = new_flock(boids_count, lower_limits, upper_limits)
-    print points
-    print lower_limits
-    print upper_limits
     in_range = np.logical_and(points >= lower_limits[:, np.newaxis], points <= upper_limits[:, np.newaxis])
     assert_true(np.all(in_range))
