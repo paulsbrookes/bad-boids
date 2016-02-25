@@ -1,6 +1,6 @@
-Bad Boids
+Bad-Boids
 
-Bad boids is a package which allows you to simulate the motion of birds using
+Bad-boids is a package which allows you to simulate the motion of birds using
 the boids model in which birds are represented by points in a 2D plane which
 attract each other, match speed within a certain distance and repel each other
 if they become too close. A collection of boids is represented using the
