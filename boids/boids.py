@@ -7,8 +7,8 @@ import os
 
 default_params = yaml.load(
         open(os.path.join(os.path.dirname(__file__), 'default_fixture.yml')))
-def_position_limits = np.array(default_params['position_limits'])
-def_velocity_limits = np.array(default_params['velocity_limits'])
+def_position_limits = default_params['position_limits']
+def_velocity_limits = default_params['velocity_limits']
 boid_count = default_params['boid_count']
 axes_limits = default_params['axes_limits']
 frames = default_params['frames']
@@ -16,6 +16,8 @@ interval = default_params['interval']
 def_movement_params = default_params['movement_params']
 
 def new_flock(count, lower_limits, upper_limits):
+    upper_limits = np.array(upper_limits)
+    lower_limits = np.array(lower_limits)
     width = upper_limits - lower_limits
     difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
     return lower_limits[:, np.newaxis] + difference
