@@ -14,14 +14,6 @@ axes_limits = default_params['axes_limits']
 frames = default_params['frames']
 interval = default_params['interval']
 
-def new_flock(count, lower_limits, upper_limits):
-    upper_limits = np.array(upper_limits)
-    lower_limits = np.array(lower_limits)
-    width = upper_limits - lower_limits
-    difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
-    return lower_limits[:, np.newaxis] + difference
-
-
 class Flock(object):
     def __init__(
         self,
@@ -33,15 +25,25 @@ class Flock(object):
         speed_match_strength=default_params['speed_match_strength'],
         speed_match_distance=default_params['speed_match_distance']
         ):
-        self.positions = new_flock(boid_count, position_limits[0], position_limits[1])
-        self.velocities = new_flock(boid_count, velocity_limits[0], velocity_limits[1])
+        self.positions = self.new_flock(
+            boid_count, position_limits[0], position_limits[1])
+        self.velocities = self.new_flock(
+            boid_count, velocity_limits[0], velocity_limits[1])
         self.attraction_strength = attraction_strength
         self.repulsion_distance = repulsion_distance
         self.speed_match_strength = speed_match_strength
         self.speed_match_distance = speed_match_distance
         self.figure = plt.figure()
         self.axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
-        self.scatter = self.axes.scatter(self.positions[:, 0], self.positions[:, 1])
+        self.scatter = self.axes.scatter(
+            self.positions[:, 0], self.positions[:, 1])
+
+    def new_flock(self, count, lower_limits, upper_limits):
+        upper_limits = np.array(upper_limits)
+        lower_limits = np.array(lower_limits)
+        width = upper_limits - lower_limits
+        difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
+        return lower_limits[:, np.newaxis] + difference
 
     def update_boids(self):
         self.accelerate_to_middle()
@@ -56,7 +58,8 @@ class Flock(object):
         self.velocities += direction_to_middle*self.attraction_strength
 
     def displacements_and_distances(self):
-        self.displacements = self.positions[:, np.newaxis, :] - self.positions[:, :, np.newaxis]
+        self.displacements = (self.positions[:, np.newaxis, :]
+                               - self.positions[:, :, np.newaxis])
         squared_displacements = self.displacements ** 2
         self.square_distances = np.sum(squared_displacements, 0)
 
@@ -68,7 +71,8 @@ class Flock(object):
         self.velocities += np.sum(displacements_if_close, 1)
 
     def speed_match(self):
-        velocity_differences = self.velocities[:, np.newaxis, :] - self.velocities[:, :, np.newaxis]
+        velocity_differences = (self.velocities[:, np.newaxis, :]
+                                 - self.velocities[:, :, np.newaxis])
         very_far = self.square_distances > self.speed_match_distance**2
         velocity_differences_if_close = np.copy(velocity_differences)
         velocity_differences_if_close[0, :, :][very_far] = 0
