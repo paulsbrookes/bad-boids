@@ -4,7 +4,10 @@ axes_limits:
 boid_count: 10
 frames: 50
 interval: 50
-movement_params: [0.01, 10, 0.125, 100]
+attraction_strength: 0.01
+repulsion_distance: 10
+speed_match_distance: 100
+speed_match_strength: 0.125
 position_limits:
 - [-450, 50]
 - [100, 1000]

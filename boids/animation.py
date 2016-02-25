@@ -24,7 +24,12 @@ def process():
             params[arg] = getattr(arguments, arg)
     frames = params['frames']
     interval = params['interval']
-    flock = Flock(boid_count=params['boid_count'])
+    flock = Flock(
+        boid_count=params['boid_count'],
+        attraction_strength=params['attraction_strength'],
+        repulsion_distance=params['repulsion_distance'],
+        speed_match_distance=params['speed_match_distance'],
+        speed_match_strength=params['speed_match_strength'])
     anim = animation.FuncAnimation(
     flock.figure, flock.animate, frames=frames, interval=interval)
     plt.show()
