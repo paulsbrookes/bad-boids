@@ -15,7 +15,6 @@ frames = default_params['frames']
 interval = default_params['interval']
 def_movement_params = default_params['movement_params']
 
-
 def new_flock(count, lower_limits, upper_limits):
     width = upper_limits - lower_limits
     difference = np.random.rand(lower_limits.size, count)*width[:, np.newaxis]
@@ -30,6 +29,9 @@ class Flock(object):
         self.repulsion_distance = movement_params[1]
         self.speed_match_strength = movement_params[2]
         self.speed_match_distance = movement_params[3]
+        self.figure = plt.figure()
+        self.axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
+        self.scatter = self.axes.scatter(self.positions[:, 0], self.positions[:, 1])
 
     def update_boids(self):
         self.accelerate_to_middle()
@@ -68,14 +70,4 @@ class Flock(object):
 
     def animate(self, frame):
         self.update_boids()
-        scatter.set_offsets(zip(self.positions[0], self.positions[1]))
-
-flock = Flock()
-figure = plt.figure()
-axes = plt.axes(xlim=axes_limits[0], ylim=axes_limits[1])
-scatter = axes.scatter(flock.positions[:, 0], flock.positions[:, 1])
-anim = animation.FuncAnimation(
- figure, flock.animate, frames=frames, interval=interval)
-
-if __name__ == "__main__":
-    plt.show()
+        self.scatter.set_offsets(zip(self.positions[0], self.positions[1]))
