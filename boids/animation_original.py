@@ -12,6 +12,15 @@ frames = default_params['frames']
 interval = default_params['interval']
 
 flock = Flock()
+fixture_file = open("original_fixture.yml", 'r')
+fixture_data = yaml.load(fixture_file)
+before = fixture_data["before"]
+flock.positions = np.array([before[0], before[1]])
+flock.velocities = np.array([before[2], before[3]])
+fixture_file.close()
+
+
+
 anim = animation.FuncAnimation(
  flock.figure, flock.animate, frames=frames, interval=interval)
 
