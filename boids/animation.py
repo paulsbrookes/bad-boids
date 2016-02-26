@@ -1,6 +1,5 @@
 from matplotlib import pyplot as plt
 from matplotlib import animation
-import random
 import numpy as np
 import yaml
 import os

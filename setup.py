@@ -6,6 +6,6 @@ setup(
     packages = find_packages(exclude=['*test']),
     license = "Apache",
     author_email = 'paul.s.brookes@gmail.com',
-    install_requires = ['numpy', 'matplotlib', 'nose'],
+    install_requires = ['numpy', 'matplotlib', 'nose', 'argparse'],
     scripts = ['scripts/boids']
 )
