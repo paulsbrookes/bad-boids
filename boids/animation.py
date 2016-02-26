@@ -27,7 +27,8 @@ def process():
      # matching their speeds.")
     arguments = parser.parse_args()
 
-    params = yaml.load(open('default_fixture.yml'))
+    params = yaml.load(
+        open(os.path.join(os.path.dirname(__file__), 'default_fixture.yml')))
     for arg in vars(arguments):
         if getattr(arguments, arg) != -1:
             params[arg] = getattr(arguments, arg)
