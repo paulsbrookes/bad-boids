@@ -7,5 +7,5 @@ setup(
     license = "Apache",
     author_email = 'paul.s.brookes@gmail.com',
     install_requires = ['numpy', 'matplotlib', 'nose'],
-    scripts = ['scripts/animate']
+    scripts = ['scripts/boids']
 )
